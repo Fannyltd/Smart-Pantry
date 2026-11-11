@@ -1,0 +1,14 @@
+# Base de données locale
+data/db.sqlite
+data/*.db
+data/*.sqlite3
+
+# Environnement Python
+.venv/
+
+# Variables sensibles
+.env
+
+# Cache Python
+__pycache__/
+*.pyc
