@@ -1,14 +1,24 @@
-# Base de données locale
-data/db.sqlite
-data/*.db
-data/*.sqlite3
-
-# Environnement Python
-.venv/
-
-# Variables sensibles
-.env
-
-# Cache Python
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Tests / outils
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# Configuration locale et données utilisateur
+.env
+data/*.db
+data/*.db-journal
+
+# Éditeurs / OS
+.vscode/
+.idea/
+.DS_Store
