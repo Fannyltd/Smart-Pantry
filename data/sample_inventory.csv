@@ -1,0 +1,19 @@
+name,category,quantity,unit,days_since_purchase,days_until_expiration,expiration_type
+Poulet,Viandes,600,g,2,1,DLC
+Tomate,Légumes,6,unité,4,2,DLC
+Crème fraîche,Produits laitiers,20,cl,5,2,DLC
+Oignon,Légumes,1,kg,7,20,DDM
+Ail,Légumes,10,unité,7,30,DDM
+Riz,Féculents,1,kg,20,300,DDM
+Pâtes,Féculents,500,g,15,240,DDM
+Œuf,Œufs,6,unité,3,12,DLC
+Lait,Produits laitiers,1,l,6,-1,DLC
+Fromage râpé,Produits laitiers,50,g,6,5,DLC
+Courgette,Légumes,2,unité,3,4,DLC
+Beurre,Produits laitiers,250,g,10,25,DLC
+Farine,Épicerie,1,kg,30,180,DDM
+Huile d'olive,Épicerie,75,cl,40,400,DDM
+Yaourt,Produits laitiers,4,unité,8,-2,DDM
+Carotte,Légumes,500,g,5,8,DLC
+Pomme de terre,Légumes,1.5,kg,6,15,DDM
+Citron,Fruits,2,unité,4,6,DLC

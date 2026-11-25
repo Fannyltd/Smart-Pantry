@@ -1,0 +1,58 @@
+digraph G {
+  graph [label="Smart Pantry — diagramme de classes (domaine + services)", labelloc=t, fontname="DejaVu Sans", fontsize=16, rankdir=TB, nodesep=0.5, ranksep=0.7, compound=true, pad=0.2];
+  node [shape=plaintext, fontname="DejaVu Sans", fontsize=11];
+  edge [fontname="DejaVu Sans", fontsize=9, color="#555555", arrowhead=vee];
+
+  subgraph cluster_services {
+    label="Services"; style=dashed; color="#777777"; fontsize=14;
+    node [fillcolor="#e6eef9"];
+    CookingService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>CookingService</td></tr><hr/><tr><td align="left" balign="left">+cook_recipe(recipe, servings, allow_partial)<br/>  → CookingReport (FEFO, atomique)</td></tr></table>>];
+    ShoppingListService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>ShoppingListService</td></tr><hr/><tr><td align="left" balign="left">+generate_shopping_list(recipe)<br/>+add_item(…)<br/>+mark_as_purchased(item)<br/>+confirm_purchase(item, …)</td></tr></table>>];
+    AnalyticsService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>AnalyticsService</td></tr><hr/><tr><td align="left" balign="left">+calculate_waste_rate()<br/>+calculate_consumption()<br/>+generate_summary()</td></tr></table>>];
+    InventoryService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>InventoryService</td></tr><hr/><tr><td align="left" balign="left">+get_inventory()<br/>+add_food_lot(product, …)<br/>+consume_food(lot, qty)<br/>+discard_food(lot, qty)<br/>+consume_from_products(…) FEFO</td></tr></table>>];
+    RecipeRecommendationService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>RecipeRecommendationService</td></tr><hr/><tr><td align="left" balign="left">+recommend_recipes()<br/>+calculate_match_score(recipe)<br/>Score = 0.6·C + 0.4·P</td></tr></table>>];
+    RecipeService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>RecipeService</td></tr><hr/><tr><td align="left" balign="left">+search(text, category)<br/>+search_by_ingredient(name)<br/>+fetch_candidates(names)</td></tr></table>>];
+    ExpirationService [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e6eef9" color="#444444"><tr><td>ExpirationService</td></tr><hr/><tr><td align="left" balign="left">+get_alerts()<br/>+get_expiring_lots()<br/>+classify_expiration_risk(lot)<br/>+urgency_score(lot)</td></tr></table>>];
+    TheMealDBClient [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff3e0" color="#444444"><tr><td>TheMealDBClient</td></tr><hr/><tr><td align="left" balign="left">filter.php · lookup.php<br/>search.php · categories.php<br/>random.php</td></tr></table>>];
+  }
+
+  subgraph cluster_domain {
+    label="Domaine (app/models)"; style=dashed; color="#777777"; fontsize=14;
+    Recipe [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>Recipe</td></tr><hr/><tr><td align="left" balign="left">+id: int<br/>+name: str<br/>+servings: int<br/>+preparation_time: int<br/>+instructions: str</td></tr><hr/><tr><td align="left">+get_ingredients(): list</td></tr></table>>];
+    ShoppingList [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>ShoppingList</td></tr><hr/><tr><td align="left">+id: int</td></tr><hr/><tr><td align="left" balign="left">+add_item(item)<br/>+remove_item(item)<br/>+get_missing_items()</td></tr></table>>];
+    Category [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>Category</td></tr><hr/><tr><td align="left" balign="left">+id: int<br/>+name: str</td></tr></table>>];
+    RecipeIngredient [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>RecipeIngredient</td></tr><hr/><tr><td align="left" balign="left">+required_quantity: float<br/>+unit: str<br/>+ingredient_name: str</td></tr></table>>];
+    ShoppingItem [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>ShoppingItem</td></tr><hr/><tr><td align="left" balign="left">+name: str<br/>+quantity: float<br/>+unit: str<br/>+is_purchased: bool</td></tr></table>>];
+    FoodProduct [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>FoodProduct</td></tr><hr/><tr><td align="left" balign="left">+id: int<br/>+name: str<br/>+category: str<br/>+base_unit: str</td></tr><hr/><tr><td align="left" balign="left">+add_lot(lot)<br/>+get_total_quantity(): float<br/>+get_available_lots()</td></tr></table>>];
+    FoodLot [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>FoodLot</td></tr><hr/><tr><td align="left" balign="left">+id: int<br/>+quantity: float<br/>+unit: str<br/>+purchase_date: date<br/>+expiration_date: date<br/>+expiration_type: DLC/DDM</td></tr><hr/><tr><td align="left" balign="left">+consume(qty)<br/>+discard(qty)<br/>+add_stock(qty)<br/>+get_expiration_status()</td></tr></table>>];
+    StockMovement [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef6ee" color="#444444"><tr><td>«abstract» StockMovement</td></tr><hr/><tr><td align="left" balign="left">+id: int<br/>+quantity: float<br/>+movement_date: datetime</td></tr><hr/><tr><td align="left">+apply()</td></tr></table>>];
+    StockWaste [label=<<table border="1" cellborder="0" cellpadding="8" bgcolor="#eef6ee" color="#444444"><tr><td>StockWaste</td></tr></table>>];
+    StockConsumption [label=<<table border="1" cellborder="0" cellpadding="8" bgcolor="#eef6ee" color="#444444"><tr><td>StockConsumption</td></tr></table>>];
+    StockEntry [label=<<table border="1" cellborder="0" cellpadding="8" bgcolor="#eef6ee" color="#444444"><tr><td>StockEntry</td></tr></table>>];
+  }
+
+  // relations du domaine
+  Recipe -> RecipeIngredient [dir=both, arrowtail=diamond, arrowhead=none, label="contains (1 → 1..*)"];
+  ShoppingList -> ShoppingItem [dir=both, arrowtail=diamond, arrowhead=none, label="contains"];
+  Category -> FoodProduct [label="classifies (1 → 0..*)"];
+  RecipeIngredient -> FoodProduct [label="references (* → 0..1)"];
+  ShoppingItem -> FoodProduct [label="references (0..* → 0..1)"];
+  FoodProduct -> FoodLot [label="has (1 → 0..*)"];
+  FoodLot -> StockMovement [label="records (1 → 0..*)"];
+  {StockWaste StockConsumption StockEntry} -> StockMovement [arrowhead=onormal];
+
+  // dépendances des services
+  edge [style=dashed, color="#888888"];
+  CookingService -> InventoryService;
+  CookingService -> RecipeRecommendationService;
+  ShoppingListService -> RecipeRecommendationService;
+  ShoppingListService -> ShoppingList;
+  AnalyticsService -> StockMovement;
+  InventoryService -> FoodLot;
+  InventoryService -> StockMovement;
+  RecipeRecommendationService -> RecipeService;
+  RecipeRecommendationService -> ExpirationService;
+  RecipeRecommendationService -> Recipe;
+  RecipeService -> TheMealDBClient;
+  ExpirationService -> FoodLot;
+}
